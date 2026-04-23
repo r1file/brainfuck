@@ -47,39 +47,6 @@ All other characters are ignored, allowing for comments in the code.
 - **Data Type**: Unsigned byte (0-255, wrapping)
 - **Pointer Range**: 0-29,999 (out of bounds causes error)
 
-## Program Examples
-
-### 1. Hello World
-```brainfuck
-++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.
-```
-
-Output: `Hello World!`
-
-### 2. Print Single Character
-```brainfuck
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++.
-```
-
-Output: `A` (ASCII 65)
-
-### 3. Simple Calculation (2+3=5)
-```brainfuck
-++>+++[<+>-]<+++++++++++++++++++++++++++++++++++++++++++++.
-```
-
-Output: `5` (ASCII 53)
-
-### 4. Input Echo
-```brainfuck
-,[.,]
-```
-
-Function: Read input and output each character until EOF
-
-### 5. 99 Bottles of Beer
-A classic Brainfuck program, can be found in `99bottles.bf`
-
 ## Features
 
 ✅ **Complete Command Support** - All 8 standard Brainfuck commands
@@ -139,7 +106,6 @@ A: Yes, modify the `MEMORY_SIZE` macro in the source code.
 ├── hello.bf             # Hello World example
 ├── hi.bf                # Hi example
 ├── abc.bf               # ABC output example
-├── examples.md          # Detailed examples and documentation
 ├── run_tests.sh         # Automated test script
 └── README.md            # This file
 ```
