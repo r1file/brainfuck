@@ -49,12 +49,12 @@ All other characters are ignored, allowing for comments in the code.
 
 ## Features
 
-✅ **Complete Command Support** - All 8 standard Brainfuck commands
-✅ **Bracket Matching Check** - Automatically detects mismatched `[` and `]`
-✅ **Error Handling** - Detects pointer out-of-bounds and bracket errors
-✅ **File and CLI Support** - Supports reading from files or passing code directly
-✅ **Standard I/O** - Full support for input (`,`) and output (`.`)
-✅ **30KB Memory** - Sufficient for running most Brainfuck programs
+- ✅ **Complete Command Support** - All 8 standard Brainfuck commands
+- ✅ **Bracket Matching Check** - Automatically detects mismatched `[` and `]`
+- ✅ **Error Handling** - Detects pointer out-of-bounds and bracket errors
+- ✅ **File and CLI Support** - Supports reading from files or passing code directly
+- ✅ **Standard I/O** - Full support for input (`,`) and output (`.`)
+- ✅ **30KB Memory** - Sufficient for running most Brainfuck programs
 
 ## Compilation Options
 
