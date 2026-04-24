@@ -5,14 +5,14 @@
 #define MEMORY_SIZE 30000
 
 typedef struct {
-    unsigned char memory[MEMORY_SIZE];
-    int data_ptr;
-    int inst_ptr;
-    const char *code;
-    int code_len;
+    unsigned char memory[MEMORY_SIZE];  // Memory array for Brainfuck data
+    int data_ptr;                       // Data pointer index
+    int inst_ptr;                       // Instruction pointer index
+    const char *code;                   // Pointer to the Brainfuck code string
+    int code_len;                       // Length of the code string
 } BFState;
 
-// 找到匹配的括号
+// Find the matching bracket for the given position in Brainfuck code
 int find_matching_bracket(const char *code, int pos, char open, char close) {
     int count = 1;
     int direction = (open == '[') ? 1 : -1;
@@ -32,7 +32,7 @@ int find_matching_bracket(const char *code, int pos, char open, char close) {
     return (count == 0) ? start : -1;
 }
 
-// 执行brainfuck代码
+// Execute the Brainfuck code by interpreting each command in the code string.
 void execute(const char *code) {
     BFState state;
     memset(&state.memory, 0, MEMORY_SIZE);
@@ -40,13 +40,13 @@ void execute(const char *code) {
     state.inst_ptr = 0;
     state.code = code;
     state.code_len = strlen(code);
-    
-    while (state.inst_ptr < state.code_len) {
+    // Initializes a BFState struct, sets up memory, data pointer, instruction pointer, etc.
+    while (state.inst_ptr < state.code_len) { // Main loop processes each character in the code:
         char cmd = code[state.inst_ptr];
         
         switch (cmd) {
             case '>':
-                // 指针右移
+                // - '>' : Increment data pointer, check bounds
                 state.data_ptr++;
                 if (state.data_ptr >= MEMORY_SIZE) {
                     fprintf(stderr, "Error: Data Pointer Out of Range!\n");
@@ -55,7 +55,7 @@ void execute(const char *code) {
                 break;
                 
             case '<':
-                // 指针左移
+                // - '<' : Decrement data pointer, check bounds
                 state.data_ptr--;
                 if (state.data_ptr < 0) {
                     fprintf(stderr, "Error: Data Pointer Out of Range!\n");
@@ -64,27 +64,27 @@ void execute(const char *code) {
                 break;
                 
             case '+':
-                // 当前值加1
+                // - '+' : Increment value at current memory location
                 state.memory[state.data_ptr]++;
                 break;
                 
             case '-':
-                // 当前值减1
+                // - '-' : Decrement value at current memory location
                 state.memory[state.data_ptr]--;
                 break;
                 
             case '.':
-                // 输出当前值的ASCII字符
+                // - '.' : Output ASCII character of current value
                 putchar(state.memory[state.data_ptr]);
                 break;
                 
             case ',':
-                // 输入一个字符
+                // - ',' : Read input character into current location
                 state.memory[state.data_ptr] = getchar();
                 break;
                 
             case '[':
-                // 如果当前值为0，跳转到匹配的]
+                // - '[' : If current value is 0, jump to matching ']')
                 if (state.memory[state.data_ptr] == 0) {
                     int matching = find_matching_bracket(code, state.inst_ptr, '[', ']');
                     if (matching == -1) {
@@ -96,7 +96,7 @@ void execute(const char *code) {
                 break;
                 
             case ']':
-                // 如果当前值非0，跳转到匹配的[
+                // - ']' : If current value is not 0, jump to matching '['
                 if (state.memory[state.data_ptr] != 0) {
                     int matching = find_matching_bracket(code, state.inst_ptr, ']', '[');
                     if (matching == -1) {
@@ -106,9 +106,9 @@ void execute(const char *code) {
                     state.inst_ptr = matching;
                 }
                 break;
-                
+            // Handles loops using find_matching_bracket, with error checking for unmatched brackets and pointer out of bounds.
             default:
-                // 忽略其他字符
+                // - Others: Ignore
                 break;
         }
         
@@ -116,34 +116,36 @@ void execute(const char *code) {
     }
 }
 
-// 从文件读取代码
+// Read the entire content of a file and return it as a dynamically allocated string.
 char *read_file(const char *filename) {
-    FILE *file = fopen(filename, "r");
+    FILE *file = fopen(filename, "r");    // Open file in read mode
     if (!file) {
         fprintf(stderr, "Error: Could Not Open File %s\n", filename);
         return NULL;
     }
     
-    fseek(file, 0, SEEK_END);
-    long file_size = ftell(file);
-    fseek(file, 0, SEEK_SET);
+    fseek(file, 0, SEEK_END);              // Seek to end of file
+    long file_size = ftell(file);          // Get file size
+    fseek(file, 0, SEEK_SET);              // Reset to beginning of file
     
-    char *buffer = (char *)malloc(file_size + 1);
+    char *buffer = (char *)malloc(file_size + 1);  // Allocate memory (file_size + 1 for null terminator)
     if (!buffer) {
         fprintf(stderr, "Error: Memory Allocation Failed\n");
         fclose(file);
         return NULL;
     }
     
-    fread(buffer, 1, file_size, file);
-    buffer[file_size] = '\0';
-    fclose(file);
+    fread(buffer, 1, file_size, file);     // Read file content into buffer
+    buffer[file_size] = '\0';              // Add null terminator to make it a valid C string
+    fclose(file);                          // Close the file
     
-    return buffer;
+    return buffer;                         // Return pointer to allocated buffer
 }
 
+// Main entry point for the Brainfuck interpreter.
 int main(int argc, char *argv[]) {
     if (argc < 2) {
+        // Check if at least one argument is provided
         printf("Usage: %s <brainfuck file or code>\n", argv[0]);
         printf("Example:\n");
         printf("  %s code.bf          # Execute code file\n", argv[0]);
@@ -153,25 +155,27 @@ int main(int argc, char *argv[]) {
     
     char *code = NULL;
     
-    // 尝试作为文件打开
+    // Attempt to open the argument as a file
     FILE *test = fopen(argv[1], "r");
     if (test) {
+        // If file exists, close temporary file pointer and read the file content
         fclose(test);
         code = read_file(argv[1]);
     } else {
-        // 直接作为代码执行
+        // If file doesn't exist, treat argument as direct Brainfuck code
         code = argv[1];
     }
     
     if (code) {
+        // Execute the Brainfuck code
         execute(code);
         
-        // 如果是从文件读取的，需要释放内存
+        // If code was read from a file, free the allocated memory
         if (test != NULL || fopen(argv[1], "r") != NULL) {
             FILE *test2 = fopen(argv[1], "r");
             if (test2) {
                 fclose(test2);
-                free(code);
+                free(code);  // Free memory only if it was allocated by read_file()
             }
         }
     }
