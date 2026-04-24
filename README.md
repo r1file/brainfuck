@@ -20,7 +20,7 @@ gcc -g brainfuck.c -o brainfuck
 
 **Method 2: Execute from file**
 ```bash
-./brainfuck hello.bf
+./brainfuck bf_tests/test.bf
 ```
 
 ## Brainfuck Language Guide
@@ -83,29 +83,17 @@ Test Coverage:
 - ✅ File execution
 - ✅ Loops and calculations
 
-## Frequently Asked Questions
-
-**Q: Why is the output garbled?**
-A: Ensure the code passed is correct Brainfuck code with accurate character counts.
-
-**Q: How do I debug a Brainfuck program?**
-A: Add comments to your code and analyze the command sequence, or use an online Brainfuck debugger to verify logic.
-
-**Q: Does it support nested loops?**
-A: Yes, it supports loops nested to any depth.
-
-**Q: Can the memory be expanded?**
-A: Yes, modify the `MEMORY_SIZE` macro in the source code.
-
 ## Project Structure
 
 ```
 .
 ├── brainfuck.c          # Interpreter source code
 ├── brainfuck            # Compiled executable
-├── hello.bf             # Hello World example
-├── hi.bf                # Hi example
-├── abc.bf               # ABC output example
+├── bf_tests/            # Stored Brainfuck test files
+│   ├── test.bf
+│   ├── test2.bf
+│   ├── test5.bf
+│   └── test8.bf
 ├── run_tests.sh         # Automated test script
 └── README.md            # This file
 ```
