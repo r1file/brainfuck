@@ -1,52 +1,32 @@
 #!/bin/bash
 
 # Brainfuck Interpreter Test Suite
+set -e
+
+if [ ! -x ./brainfuck ]; then
+  echo "Building brainfuck executable..."
+  clang -g brainfuck.c -o brainfuck
+fi
+
+if [ ! -d bf_tests ]; then
+  echo "Error: bf_tests directory not found"
+  exit 1
+fi
 
 echo "===== Brainfuck Interpreter Tests ====="
 echo
 
-# Test 1: Hello World
-echo "Test 1: Hello World"
-./brainfuck '++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.'
-echo
-echo
+shopt -s nullglob
+files=(bf_tests/*.bf)
+if [ ${#files[@]} -eq 0 ]; then
+  echo "Error: No .bf files found in bf_tests"
+  exit 1
+fi
 
-# Test 2: Print Letter A
-echo "Test 2: Print Letter A"
-python3 << 'EOF'
-code = '+' * 65 + '.'
-import subprocess
-subprocess.run(['./brainfuck', code])
-EOF
-echo
-echo
-
-# Test 3: Print Multiple Characters (ABC)
-echo "Test 3: Print Multiple Characters (ABC)"
-python3 << 'EOF'
-# Generate ASCII values for A(65), B(66), C(67)
-code = '+' * 65 + '.' + '>' + '+' * 66 + '.' + '>' + '+' * 67 + '.'
-import subprocess
-subprocess.run(['./brainfuck', code])
-EOF
-echo
-echo
-
-# Test 4: Execute from File
-echo "Test 4: Execute from File (hello.bf)"
-./brainfuck hello.bf
-echo
-echo
-
-# Test 5: Loop Test - Addition
-echo "Test 5: Loop Test - Addition (2+3=5)"
-python3 << 'EOF'
-# Calculate 2 + 3 = 5
-code = '+' * 2 + '>' + '+' * 3 + '<' + '[>' + '+' + '<-]' + '>' + ('+' * 48) + '.'
-import subprocess
-subprocess.run(['./brainfuck', code])
-EOF
-echo
-echo
+for testfile in "${files[@]}"; do
+  echo "Running test: $testfile"
+  ./brainfuck "$testfile"
+  echo
+done
 
 echo "===== Tests Completed ====="
